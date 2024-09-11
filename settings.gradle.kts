@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -14,6 +15,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Runique"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":auth:data")
 include(":auth:domain")
