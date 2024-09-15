@@ -12,3 +12,12 @@ dependencies {
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.room.gradlePlugin)
 }
+
+gradlePlugin {
+    plugins {
+        register("androidAplication") {
+            id = "runique.android.adroidApplication"
+            implementationClass = "AndroidApplicationConventionPlugin"
+        }
+    }
+}
