@@ -1,4 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
+import com.kaesik.convention.ExtensionType
+import com.kaesik.convention.configureBuildTypes
 import com.kaesik.convention.configureKotlinAndroid
 import com.kaesik.convention.libs
 import org.gradle.api.Plugin
@@ -23,7 +25,12 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
                 }
             }
 
-            configureKotlinAndroid(extensions.getByType())
+            configureKotlinAndroid(this.extensions.getByType())
+
+            configureBuildTypes(
+                commonExtension = this.extensions.getByType(),
+                extensionType = ExtensionType.APPLICATION
+            )
         }
     }
 }
