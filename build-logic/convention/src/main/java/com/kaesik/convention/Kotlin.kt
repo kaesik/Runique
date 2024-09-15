@@ -7,7 +7,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-internal fun  Project.configureKotlinAndroid(
+internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *>
 ) {
     commonExtension.apply {
@@ -24,7 +24,7 @@ internal fun  Project.configureKotlinAndroid(
     configureKotlin()
 
     dependencies {
-        "coreLibraryDesugaring"(libs.findLibrary("desugar.jdg.libs").get())
+        "coreLibraryDesugaring"(libs.findLibrary("desugar.jdk.libs").get())
     }
 }
 
@@ -33,6 +33,5 @@ private fun Project.configureKotlin() {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_11.toString()
         }
-
     }
 }
