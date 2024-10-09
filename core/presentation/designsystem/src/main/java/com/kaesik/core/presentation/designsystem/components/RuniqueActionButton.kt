@@ -24,7 +24,7 @@ import com.kaesik.core.presentation.designsystem.RuniqueBlack
 import com.kaesik.core.presentation.designsystem.RuniqueGray
 
 @Composable
-fun ActionButton(
+fun RuniqueActionButton(
     text: String,
     isLoading: Boolean,
     modifier: Modifier = Modifier,
@@ -68,7 +68,7 @@ fun ActionButton(
 }
 
 @Composable
-fun OutlinedActionButton(
+fun RuniqueOutlinedActionButton(
     text: String,
     isLoading: Boolean,
     modifier: Modifier = Modifier,

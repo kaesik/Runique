@@ -1,18 +1,14 @@
 package com.kaesik.auth.presentation.intro
 
-import android.graphics.drawable.Icon
-import androidx.compose.foundation.content.MediaType.Companion.Text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,9 +20,9 @@ import androidx.compose.ui.unit.sp
 import com.kaesik.auth.presentation.R
 import com.kaesik.core.presentation.designsystem.LogoIcon
 import com.kaesik.core.presentation.designsystem.RuniqueTheme
-import com.kaesik.core.presentation.designsystem.components.ActionButton
+import com.kaesik.core.presentation.designsystem.components.RuniqueActionButton
 import com.kaesik.core.presentation.designsystem.components.GradientBackground
-import com.kaesik.core.presentation.designsystem.components.OutlinedActionButton
+import com.kaesik.core.presentation.designsystem.components.RuniqueOutlinedActionButton
 
 
 @Composable
@@ -78,7 +74,7 @@ fun IntroScreen(
             Spacer(
                 modifier = Modifier.height(32.dp)
             )
-            OutlinedActionButton(
+            RuniqueOutlinedActionButton(
                 text = stringResource(id = R.string.sign_in),
                 isLoading = false,
                 modifier = Modifier.fillMaxWidth(),
@@ -89,7 +85,7 @@ fun IntroScreen(
             Spacer(
                 modifier = Modifier.height(16.dp)
             )
-            ActionButton(
+            RuniqueActionButton(
                 text = stringResource(id = R.string.sign_up),
                 isLoading = false,
                 modifier = Modifier.fillMaxWidth(),
