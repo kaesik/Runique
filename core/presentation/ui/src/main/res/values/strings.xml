@@ -7,5 +7,5 @@
     <string name="error_payload_too_large">The file is too large</string>
     <string name="error_server_error">Something went wrong, please try again</string>
     <string name="error_serialization">Could\'t parse data</string>
-    <string name="error_unknown">An unknown error occured</string>
+    <string name="error_unknown">An unknown error occurred</string>
 </resources>

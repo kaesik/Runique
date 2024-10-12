@@ -7,7 +7,7 @@ class UserDataValidator (
         return patternValidator.matches(email.trim())
     }
 
-    fun isValidPassword(password: String): PasswordValidationState {
+    fun validatePassword(password: String): PasswordValidationState {
         val hasMinLength = password.length >= MIN_PASSWORD_LENGTH
         val hasDigit = password.any { it.isDigit() }
         val hasLowerCaseChar = password.any { it.isLowerCase() }
@@ -22,6 +22,6 @@ class UserDataValidator (
     }
 
     companion object {
-        const val MIN_PASSWORD_LENGTH = 8
+        const val MIN_PASSWORD_LENGTH = 9
     }
 }
