@@ -1,5 +1,6 @@
 package com.kaesik.runique
 
+import RunOverviewScreenRoot
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
@@ -79,7 +80,7 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
         route = "run"
     ) {
         composable("run_overview") {
-            Text(text = "Run overview!")
+            RunOverviewScreenRoot()
         }
     }
 }

@@ -44,9 +44,9 @@ import com.kaesik.core.presentation.designsystem.components.util.DropDownItem
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RuniqueToolbar(
+    modifier: Modifier = Modifier,
     showBackButton: Boolean,
     title: String,
-    modifier: Modifier,
     menuItems: List<DropDownItem> = emptyList(),
     onMenuItemClick: (Int) -> Unit = {},
     onBackClick: () -> Unit = {},
