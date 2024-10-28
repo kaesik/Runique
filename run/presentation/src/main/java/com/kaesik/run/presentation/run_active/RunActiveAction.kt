@@ -14,4 +14,5 @@ sealed interface RunActiveAction {
         val acceptedNotificationPermission: Boolean,
         val showNotificationRationale: Boolean,
     ): RunActiveAction
+    data object DismissRationaleDialog: RunActiveAction
 }

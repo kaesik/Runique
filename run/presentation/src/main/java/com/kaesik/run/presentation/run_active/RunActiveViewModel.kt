@@ -36,6 +36,12 @@ class RunActiveViewModel: ViewModel() {
                     showNotificationRationale = action.showNotificationRationale
                 )
             }
+            is RunActiveAction.DismissRationaleDialog -> {
+                state = state.copy(
+                    showNotificationRationale = false,
+                    showLocationRationale = false,
+                )
+            }
             else -> Unit
         }
     }
