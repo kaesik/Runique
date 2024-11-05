@@ -1,17 +1,23 @@
 package com.kaesik.run.domain
 
 import com.kaesik.core.domain.Timer
+import com.kaesik.core.domain.location.RuniqueLocation
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.zip
+import kotlin.math.roundToInt
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class RunningTracker(
     private val locationObserver: LocationObserver,
@@ -50,6 +56,52 @@ class RunningTracker(
                 _elapsedTime.value += it
             }
             .launchIn(applicationScope)
+
+        currentLocation
+            .filterNotNull()
+            .combineTransform(isTracking) { location, isTracking ->
+                if (isTracking) {
+                    emit(location)
+                }
+            }
+            .zip(_elapsedTime) { location, elapsedTime ->
+                RuniqueLocation(
+                    lat = location.lat,
+                    long = location.long,
+                    durationTimestamp = elapsedTime
+                )
+            }
+            .onEach { location ->
+                val currentLocations = runData.value.runiqueLocations
+                val lastLocationsList = if (currentLocations.isNotEmpty()) {
+                    currentLocations.last() + location
+                } else listOf(location)
+                val newLocationsList = currentLocations.replaceLast(lastLocationsList)
+
+                val distanceMeters = LocationDataCalculator.getTotalDistanceMeter(
+                    locations = newLocationsList
+                )
+                val distanceKm = distanceMeters / 1000.0
+                val currentDuration = location.durationTimestamp
+                val avgSecondsPerKm = if (distanceKm == 0.0) {
+                    0
+                } else {
+                    if (currentDuration != null) {
+                        (currentDuration.inWholeSeconds / distanceKm).roundToInt()
+                    } else {
+                        0
+                    }
+                }
+
+                _runData.update {
+                    RunData(
+                        distanceMeters = distanceMeters,
+                        pace = avgSecondsPerKm.seconds,
+                        runiqueLocations = newLocationsList
+                    )
+                }
+            }
+            .launchIn(applicationScope)
     }
 
     fun setIsTracking(isTracking: Boolean) {
@@ -62,6 +114,13 @@ class RunningTracker(
 
     fun stopObservingLocation() {
         isObservingLocation.value = false
+    }
+
+    private fun <T> List<List<T>>.replaceLast(replacement: List<T>): List<List<T>> {
+        if (this.isEmpty()) {
+            return listOf(replacement)
+        }
+        return this.dropLast(1) + listOf(replacement)
     }
 
 }
