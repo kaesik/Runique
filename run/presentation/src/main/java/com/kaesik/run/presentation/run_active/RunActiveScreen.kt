@@ -143,6 +143,13 @@ private fun RunActiveScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
         ) {
+            TrackerMap(
+                isRunFinished = state.isRunningFinished,
+                currentLocation = state.currentRuniqueLocation,
+                locations = state.runData.runiqueLocations,
+                onSnapshot = {},
+                modifier = Modifier.fillMaxSize()
+            )
             RunDataCard(
                 elapsedTime = state.elapsedTime,
                 runData = state.runData,
