@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,6 +30,7 @@ import com.kaesik.core.presentation.designsystem.components.RuniqueOutlinedActio
 import com.kaesik.core.presentation.designsystem.components.RuniqueScaffold
 import com.kaesik.core.presentation.designsystem.components.RuniqueToolbar
 import com.kaesik.run.presentation.R
+import com.kaesik.run.presentation.run_active.maps.TrackerMap
 import com.kaesik.run.presentation.run_active.components.RunDataCard
 import com.kaesik.run.presentation.util.hasLocationPermission
 import com.kaesik.run.presentation.util.hasNotificationPermission

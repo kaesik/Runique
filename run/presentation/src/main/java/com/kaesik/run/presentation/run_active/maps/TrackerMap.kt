@@ -1,4 +1,4 @@
-package com.kaesik.run.presentation.run_active
+package com.kaesik.run.presentation.run_active.maps
 
 import android.graphics.Bitmap
 import androidx.compose.animation.core.animateFloatAsState
@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
@@ -85,6 +84,8 @@ fun TrackerMap(
             zoomControlsEnabled = false
         )
     ) {
+        RuniquePolylines(locations = locations)
+
         if (!isRunFinished && currentLocation != null) {
             MarkerComposable(
                 currentLocation,
