@@ -3,15 +3,18 @@ package com.kaesik.runique
 import RunOverviewScreenRoot
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.navDeepLink
 import com.kaesik.auth.presentation.intro.IntroScreenRoot
 import com.kaesik.auth.presentation.login.LoginScreenRoot
 import com.kaesik.auth.presentation.register.RegisterScreenRoot
 import com.kaesik.run.presentation.run_active.RunActiveScreenRoot
+import com.kaesik.run.presentation.run_active.service.RunActiveService
 
 @Composable
 fun NavigationRoot(
@@ -87,8 +90,33 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
                 }
             )
         }
-        composable("run_active") {
-            RunActiveScreenRoot()
+        composable(
+            route= "run_active",
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "runique://run_active"
+                }
+            )
+        ) {
+            val context = LocalContext.current
+            RunActiveScreenRoot(
+                onServiceToggle = { shouldServiceRun ->
+                    if (shouldServiceRun) {
+                        context.startService(
+                            RunActiveService.createStartIntent(
+                                context = context,
+                                activityClass = MainActivity::class.java
+                            )
+                        )
+                    } else {
+                        context.startService(
+                            RunActiveService.createStopIntent(
+                                context = context
+                            )
+                        )
+                    }
+                }
+            )
         }
     }
 }
