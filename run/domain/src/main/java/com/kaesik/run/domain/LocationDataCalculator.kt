@@ -8,8 +8,8 @@ object LocationDataCalculator {
         return locations
             .sumOf { timestampsPerLine ->
                 timestampsPerLine.zipWithNext { location1, location2 ->
+                    println(location1.distanceTo(location2))
                     location1.distanceTo(location2)
                 }.sum().roundToInt()
             }
-    }
-}
+}}

@@ -1,8 +1,11 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.kaesik.run.domain
 
 import com.kaesik.core.domain.Timer
 import com.kaesik.core.domain.location.RuniqueLocation
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -86,11 +89,7 @@ class RunningTracker(
                 val avgSecondsPerKm = if (distanceKm == 0.0) {
                     0
                 } else {
-                    if (currentDuration != null) {
-                        (currentDuration.inWholeSeconds / distanceKm).roundToInt()
-                    } else {
-                        0
-                    }
+                    (currentDuration.inWholeSeconds / distanceKm).roundToInt()
                 }
 
                 _runData.update {
