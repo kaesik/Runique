@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -76,6 +77,10 @@ fun RunListItem(
             duration = runUi.duration,
             modifier = Modifier.fillMaxWidth()
         )
+        HorizontalDivider(
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+        )
+        RunningDateSection(dateTime = runUi.dateTime)
     }
 }
 
@@ -158,8 +163,20 @@ private fun RunningTimeSection(
                 text = stringResource(id = R.string.total_running_time),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+            Text(
+                text = duration,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
+}
+
+@Composable
+fun RunningDateSection(
+    dateTime: String,
+    modifier: Modifier = Modifier
+) {
+
 }
 
 @Composable
