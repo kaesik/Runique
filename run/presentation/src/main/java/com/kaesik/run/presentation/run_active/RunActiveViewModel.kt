@@ -7,6 +7,9 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kaesik.core.domain.location.RuniqueLocation
+import com.kaesik.core.domain.run.Run
+import com.kaesik.run.domain.LocationDataCalculator
 import com.kaesik.run.domain.RunningTracker
 import com.kaesik.run.presentation.run_active.service.RunActiveService
 import kotlinx.coroutines.channels.Channel
@@ -17,6 +20,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class RunActiveViewModel(
     private val runningTracker: RunningTracker
@@ -83,6 +89,10 @@ class RunActiveViewModel(
     fun onAction(action: RunActiveAction) {
         when (action) {
             RunActiveAction.OnFinishRunClick -> {
+                state = state.copy(
+                    isRunningFinished = true,
+                    isSavingRun = true
+                )
             }
             RunActiveAction.OnResumeRunClick -> {
                 state = state.copy(
@@ -117,7 +127,35 @@ class RunActiveViewModel(
                     showLocationRationale = false,
                 )
             }
+            is RunActiveAction.OnRunProcessed -> {
+                finishRun(action.mapPicturesBytes)
+            }
             else -> Unit
+        }
+    }
+
+    private fun finishRun(mapPicturesBytes: ByteArray) {
+        val locations = state.runData.runiqueLocations
+        if (locations.isEmpty() || locations.first().size <= 1) {
+            state = state.copy(isSavingRun = false)
+            return
+        }
+
+        viewModelScope.launch {
+            val run = Run(
+                id = null,
+                duration = state.elapsedTime,
+                dateTimeUtc = ZonedDateTime.now()
+                    .withZoneSameInstant(ZoneId.of("UTC")),
+                distanceMeters = state.runData.distanceMeters,
+                location = state.currentRuniqueLocation ?: RuniqueLocation(0.0, 0.0),
+                maxSpeedKmh = LocationDataCalculator.getMaxSpeedKmh(locations),
+                totalElevationMeters = LocationDataCalculator.getTotalElevationMeters(locations),
+                mapPictureUrl = null
+            )
+
+            runningTracker.finishRun()
+            state = state.copy(isSavingRun = false)
         }
     }
 

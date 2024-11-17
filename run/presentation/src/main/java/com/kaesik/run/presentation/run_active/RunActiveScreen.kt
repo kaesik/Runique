@@ -2,6 +2,7 @@ package com.kaesik.run.presentation.run_active
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -39,6 +40,8 @@ import com.kaesik.run.presentation.util.hasNotificationPermission
 import com.kaesik.run.presentation.util.shouldShowLocationPermissionRationale
 import com.kaesik.run.presentation.util.shouldShowNotificationPermissionRationale
 import org.koin.androidx.compose.koinViewModel
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 
 @Composable
 
@@ -164,7 +167,17 @@ private fun RunActiveScreen(
                 isRunFinished = state.isRunningFinished,
                 currentLocation = state.currentRuniqueLocation,
                 locations = state.runData.runiqueLocations,
-                onSnapshot = {},
+                onSnapshot = {bmp ->
+                    val stream = ByteArrayOutputStream()
+                    stream.use {
+                        bmp.compress(
+                            Bitmap.CompressFormat.JPEG,
+                            80,
+                            it
+                        )
+                    }
+                    onAction(RunActiveAction.OnRunProcessed(stream.toByteArray()))
+                },
                 modifier = Modifier.fillMaxSize()
             )
             RunDataCard(
