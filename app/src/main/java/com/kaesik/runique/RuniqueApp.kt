@@ -7,6 +7,7 @@ import com.kaesik.core.data.BuildConfig
 import com.kaesik.core.data.di.coreDataModule
 import com.kaesik.core.database.di.databaseModule
 import com.kaesik.run.location.di.locationModule
+import com.kaesik.run.network.di.networkModule
 import com.kaesik.run.presentation.di.runPresentationModule
 import com.kaesik.runique.di.appModule
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +36,8 @@ class RuniqueApp: Application() {
                 coreDataModule,
                 runPresentationModule,
                 locationModule,
-                databaseModule
+                databaseModule,
+                networkModule
             )
         }
     }

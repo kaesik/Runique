@@ -9,6 +9,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kaesik.core.domain.location.RuniqueLocation
 import com.kaesik.core.domain.run.Run
+import com.kaesik.core.domain.run.RunRepository
+import com.kaesik.core.domain.util.Result
+import com.kaesik.core.presentation.ui.asUiText
 import com.kaesik.run.domain.LocationDataCalculator
 import com.kaesik.run.domain.RunningTracker
 import com.kaesik.run.presentation.run_active.service.RunActiveService
@@ -25,7 +28,8 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class RunActiveViewModel(
-    private val runningTracker: RunningTracker
+    private val runningTracker: RunningTracker,
+    private val runRepository: RunRepository,
 ): ViewModel() {
     var state by mutableStateOf(RunActiveState(
         shouldTrack = RunActiveService.isServiceActive && runningTracker.isTracking.value,
@@ -155,6 +159,15 @@ class RunActiveViewModel(
             )
 
             runningTracker.finishRun()
+            when (val result = runRepository.upsertRun(run, mapPicturesBytes)) {
+                is Result.Error -> {
+                    eventChannel.send(RunActiveEvent.Error(result.error.asUiText()))
+                }
+                is Result.Success -> {
+                    eventChannel.send(RunActiveEvent.RunSaved)
+                }
+            }
+
             state = state.copy(isSavingRun = false)
         }
     }

@@ -13,7 +13,7 @@ interface RunDao {
     suspend fun upsertRun(run: RunEntity)
 
     @Upsert
-    suspend fun upsertRuns(run: List<RunEntity>)
+    suspend fun upsertRuns(runs: List<RunEntity>)
 
     @Query("SELECT * FROM runentity ORDER BY dateTimeUtc DESC")
     fun getRuns(): Flow<List<RunEntity>>

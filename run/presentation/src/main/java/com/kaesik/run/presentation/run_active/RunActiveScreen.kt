@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -31,6 +32,7 @@ import com.kaesik.core.presentation.designsystem.components.RuniqueFloatingActio
 import com.kaesik.core.presentation.designsystem.components.RuniqueOutlinedActionButton
 import com.kaesik.core.presentation.designsystem.components.RuniqueScaffold
 import com.kaesik.core.presentation.designsystem.components.RuniqueToolbar
+import com.kaesik.core.presentation.ui.ObserveAsEvents
 import com.kaesik.run.presentation.R
 import com.kaesik.run.presentation.run_active.maps.TrackerMap
 import com.kaesik.run.presentation.run_active.components.RunDataCard
@@ -46,13 +48,38 @@ import java.io.ByteArrayOutputStream
 @Composable
 
 fun RunActiveScreenRoot(
+    onFinish: () -> Unit,
+    onBack: () -> Unit,
     onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     viewModel: RunActiveViewModel = koinViewModel()
 ) {
+    val context = LocalContext.current
+    ObserveAsEvents(flow = viewModel.events) { event ->
+        when (event) {
+            is RunActiveEvent.Error -> {
+                Toast.makeText(
+                    context,
+                    event.error.asString(context),
+                    Toast.LENGTH_LONG
+                )
+            }
+            RunActiveEvent.RunSaved -> onFinish()
+        }
+    }
     RunActiveScreen(
         state = viewModel.state,
         onServiceToggle = onServiceToggle,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when (action) {
+                is RunActiveAction.OnBackClick -> {
+                    if (!viewModel.state.hasStartedRunning) {
+                        onBack()
+                    }
+                }
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        }
     )
 }
 
