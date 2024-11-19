@@ -24,8 +24,8 @@ class KtorRemoteRunDataSource(
 ):RemoteRunDataSource {
     override suspend fun getRuns(): Result<List<Run>, DataError.Network> {
         return httpClient.get<List<RunDto>>(
-            route = "/runs"
-        ).map {runDtos ->
+            route = "/runs",
+        ).map { runDtos ->
             runDtos.map { it.toRun() }
         }
     }
@@ -38,7 +38,7 @@ class KtorRemoteRunDataSource(
                 formData = formData {
                     append("MAP_PICTURE", mapPicture, Headers.build {
                         append(HttpHeaders.ContentType, "image/jpeg")
-                        append(HttpHeaders.ContentDisposition, "filename=mappicture.jpeg")
+                        append(HttpHeaders.ContentDisposition, "filename=mappicture.jpg")
                     })
                     append("RUN_DATA", createRunRequestJson, Headers.build {
                         append(HttpHeaders.ContentType, "text/plain")

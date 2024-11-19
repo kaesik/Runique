@@ -94,7 +94,7 @@ class RunningTracker(
                 } else listOf(location)
                 val newLocationsList = currentLocations.replaceLast(lastLocationsList)
 
-                val distanceMeters = LocationDataCalculator.getTotalDistanceMeter(
+                val distanceMeters = LocationDataCalculator.getTotalDistanceMeters(
                     locations = newLocationsList
                 )
                 val distanceKm = distanceMeters / 1000.0
@@ -134,12 +134,11 @@ class RunningTracker(
         _elapsedTime.value = Duration.ZERO
         _runData.value = RunData()
     }
+}
 
-    private fun <T> List<List<T>>.replaceLast(replacement: List<T>): List<List<T>> {
-        if (this.isEmpty()) {
-            return listOf(replacement)
-        }
-        return this.dropLast(1) + listOf(replacement)
+private fun <T> List<List<T>>.replaceLast(replacement: List<T>): List<List<T>> {
+    if (this.isEmpty()) {
+        return listOf(replacement)
     }
-
+    return this.dropLast(1) + listOf(replacement)
 }

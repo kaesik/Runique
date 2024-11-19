@@ -61,7 +61,7 @@ fun RunActiveScreenRoot(
                     context,
                     event.error.asString(context),
                     Toast.LENGTH_LONG
-                )
+                ).show()
             }
             RunActiveEvent.RunSaved -> onFinish()
         }
@@ -265,7 +265,7 @@ private fun RunActiveScreen(
             } ,
             primaryButton = {
                 RuniqueOutlinedActionButton(
-                    text = stringResource(R.string.okay),
+                    text = stringResource(id = R.string.okay),
                     isLoading =  false,
                     onClick = {
                         onAction(RunActiveAction.DismissRationaleDialog)

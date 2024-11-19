@@ -1,4 +1,4 @@
-@file:OptIn(DelicateCoroutinesApi::class)
+@file:OptIn(MapsComposeExperimentalApi::class, DelicateCoroutinesApi::class)
 
 package com.kaesik.run.presentation.run_active.maps
 
@@ -48,7 +48,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(MapsComposeExperimentalApi::class)
 @Composable
 fun TrackerMap(
     isRunFinished: Boolean,

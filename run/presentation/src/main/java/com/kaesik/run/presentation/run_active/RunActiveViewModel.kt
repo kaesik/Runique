@@ -132,13 +132,13 @@ class RunActiveViewModel(
                 )
             }
             is RunActiveAction.OnRunProcessed -> {
-                finishRun(action.mapPicturesBytes)
+                finishRun(action.mapPictureBytes)
             }
             else -> Unit
         }
     }
 
-    private fun finishRun(mapPicturesBytes: ByteArray) {
+    private fun finishRun(mapPictureBytes: ByteArray) {
         val locations = state.runData.runiqueLocations
         if (locations.isEmpty() || locations.first().size <= 1) {
             state = state.copy(isSavingRun = false)
@@ -159,7 +159,7 @@ class RunActiveViewModel(
             )
 
             runningTracker.finishRun()
-            when (val result = runRepository.upsertRun(run, mapPicturesBytes)) {
+            when (val result = runRepository.upsertRun(run, mapPictureBytes)) {
                 is Result.Error -> {
                     eventChannel.send(RunActiveEvent.Error(result.error.asUiText()))
                 }

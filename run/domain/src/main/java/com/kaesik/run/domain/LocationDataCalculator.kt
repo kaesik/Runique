@@ -5,11 +5,10 @@ import kotlin.math.roundToInt
 import kotlin.time.DurationUnit
 
 object LocationDataCalculator {
-    fun getTotalDistanceMeter(locations: List<List<RuniqueLocation>>): Int {
+    fun getTotalDistanceMeters(locations: List<List<RuniqueLocation>>): Int {
         return locations
             .sumOf { timestampsPerLine ->
                 timestampsPerLine.zipWithNext { location1, location2 ->
-                    println(location1.distanceTo(location2))
                     location1.distanceTo(location2)
                 }.sum().roundToInt()
             }

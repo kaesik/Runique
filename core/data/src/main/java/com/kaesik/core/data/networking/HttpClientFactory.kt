@@ -34,7 +34,7 @@ class HttpClientFactory(
                 )
             }
             install(Logging) {
-                logger =  object : Logger {
+                logger = object : Logger {
                     override fun log(message: String) {
                         Timber.d(message)
                     }
@@ -57,7 +57,7 @@ class HttpClientFactory(
                     refreshTokens {
                         val info = sessionStorage.get()
                         val response = client.post<AccessTokenRequest, AccessTokenResponse>(
-                            route = "/accesToken",
+                            route = "/accessToken",
                             body = AccessTokenRequest(
                                 refreshToken = info?.refreshToken ?: "",
                                 userId = info?.userId ?: ""
@@ -65,7 +65,7 @@ class HttpClientFactory(
                         )
 
                         if (response is Result.Success) {
-                            val newAuthInfo = AuthInfo (
+                            val newAuthInfo = AuthInfo(
                                 accessToken = response.data.accessToken,
                                 refreshToken = info?.refreshToken ?: "",
                                 userId = info?.userId ?: ""

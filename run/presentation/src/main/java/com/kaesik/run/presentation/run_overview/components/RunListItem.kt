@@ -1,4 +1,4 @@
-@file:Suppress("UNREACHABLE_CODE")
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 
 package com.kaesik.run.presentation.run_overview.components
 
@@ -83,7 +83,7 @@ fun RunListItem(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            MapImage(imageUrl = runUi.mapPictureUtr)
+            MapImage(imageUrl = runUi.mapPictureUrl)
             RunningTimeSection(
                 duration = runUi.duration,
                 modifier = Modifier.fillMaxWidth()
@@ -177,7 +177,8 @@ private fun RunningTimeSection(
                     color = MaterialTheme.colorScheme.primary,
                     shape = RoundedCornerShape(10.dp)
                 )
-                .padding(4.dp)
+                .padding(4.dp),
+            contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = RunOutlinedIcon,
@@ -311,8 +312,7 @@ private fun RunListItemPreview() {
                 totalElevationMeters = 2137,
                 mapPictureUrl = null
             ).toRunUi(),
-            onDeleteClick = { TODO() },
-            modifier = TODO()
+            onDeleteClick = { TODO() }
         )
     }
 }

@@ -10,7 +10,7 @@ fun RunDto.toRun(): Run {
     return Run(
         id = id,
         duration = durationMillis.milliseconds,
-        dateTimeUtc = Instant.parse(dataTimeUtc)
+        dateTimeUtc = Instant.parse(dateTimeUtc)
             .atZone(ZoneId.of("UTC")),
         distanceMeters = distanceMeters,
         location = RuniqueLocation(
