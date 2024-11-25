@@ -8,7 +8,7 @@ import com.kaesik.core.domain.run.LocalRunDataSource
 import com.kaesik.core.domain.run.Run
 import com.kaesik.core.domain.run.RunId
 import com.kaesik.core.domain.util.DataError
-import com.kaesik.core.domain.util.Result
+import com.kaesik.core.domain.util.RuniqueResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -23,23 +23,23 @@ class RoomLocalRunDataSource(
             }
     }
 
-    override suspend fun upsertRun(run: Run): Result<RunId, DataError.Local> {
+    override suspend fun upsertRun(run: Run): RuniqueResult<RunId, DataError.Local> {
         return try {
             val entity = run.toRunEntity()
             runDao.upsertRun(entity)
-            Result.Success(entity.id)
+            RuniqueResult.Success(entity.id)
         } catch (e: SQLiteFullException) {
-            Result.Error(DataError.Local.DISK_FULL)
+            RuniqueResult.Error(DataError.Local.DISK_FULL)
         }
     }
 
-    override suspend fun upsertRuns(runs: List<Run>): Result<List<RunId>, DataError.Local> {
+    override suspend fun upsertRuns(runs: List<Run>): RuniqueResult<List<RunId>, DataError.Local> {
         return try {
             val entities = runs.map { it.toRunEntity() }
             runDao.upsertRuns(entities)
-            Result.Success(entities.map { it.id })
+            RuniqueResult.Success(entities.map { it.id })
         } catch (e: SQLiteFullException) {
-            Result.Error(DataError.Local.DISK_FULL)
+            RuniqueResult.Error(DataError.Local.DISK_FULL)
         }
     }
 

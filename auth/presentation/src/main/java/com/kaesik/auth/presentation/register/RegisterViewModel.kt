@@ -10,7 +10,7 @@ import com.kaesik.auth.domain.UserDataValidator
 import com.kaesik.auth.presentation.R
 import com.kaesik.auth.presentation.textAsFlow
 import com.kaesik.core.domain.util.DataError
-import com.kaesik.core.domain.util.Result
+import com.kaesik.core.domain.util.RuniqueResult
 import com.kaesik.core.presentation.ui.UiText
 import com.kaesik.core.presentation.ui.asUiText
 import kotlinx.coroutines.channels.Channel
@@ -79,7 +79,7 @@ class RegisterViewModel(
             state = state.copy(isRegistering = false)
 
             when (result) {
-                is Result.Error -> {
+                is RuniqueResult.Error -> {
                     if (result.error == DataError.Network.CONFLICT) {
                         eventChannel.send(
                             RegisterEvent.Error(
@@ -94,7 +94,7 @@ class RegisterViewModel(
                         )
                     }
                 }
-                is Result.Success -> {
+                is RuniqueResult.Success -> {
                     eventChannel.send(RegisterEvent.RegistrationSuccess)
                 }
             }

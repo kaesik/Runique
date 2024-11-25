@@ -6,7 +6,7 @@ import com.kaesik.core.domain.AuthInfo
 import com.kaesik.core.domain.SessionStorage
 import com.kaesik.core.domain.util.DataError
 import com.kaesik.core.domain.util.EmptyResult
-import com.kaesik.core.domain.util.Result
+import com.kaesik.core.domain.util.RuniqueResult
 import com.kaesik.core.domain.util.asEmptyDataResult
 import io.ktor.client.HttpClient
 
@@ -22,7 +22,7 @@ class AuthRepositoryImpl(
                 password = password,
             )
         )
-        if (result is Result.Success) {
+        if (result is RuniqueResult.Success) {
             sessionStorage.set(
                 AuthInfo(
                     accessToken = result.data.accessToken,

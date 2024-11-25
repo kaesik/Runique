@@ -10,7 +10,7 @@ import com.kaesik.core.domain.run.RunId
 import com.kaesik.core.domain.run.RunRepository
 import com.kaesik.core.domain.util.DataError
 import com.kaesik.core.domain.util.EmptyResult
-import com.kaesik.core.domain.util.Result
+import com.kaesik.core.domain.util.RuniqueResult
 import com.kaesik.core.domain.util.asEmptyDataResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,8 +32,8 @@ class OfflineFirstRunRepository(
 
     override suspend fun fetchRuns(): EmptyResult<DataError> {
         return when (val result = remoteRunDataSource.getRuns()) {
-            is Result.Error -> result.asEmptyDataResult()
-            is Result.Success -> {
+            is RuniqueResult.Error -> result.asEmptyDataResult()
+            is RuniqueResult.Success -> {
                 applicationScope.async {
                     localRunDataSource.upsertRuns(result.data).asEmptyDataResult()
                 }.await()
@@ -43,7 +43,7 @@ class OfflineFirstRunRepository(
 
     override suspend fun upsertRun(run: Run, mapPicture: ByteArray): EmptyResult<DataError> {
         val localResult = localRunDataSource.upsertRun(run)
-        if (localResult !is Result.Success) {
+        if (localResult !is RuniqueResult.Success) {
             return localResult.asEmptyDataResult()
         }
 
@@ -54,10 +54,10 @@ class OfflineFirstRunRepository(
         )
 
         return when (remoteResult) {
-            is Result.Error -> {
-                Result.Success(Unit)
+            is RuniqueResult.Error -> {
+                RuniqueResult.Success(Unit)
             }
-            is Result.Success -> {
+            is RuniqueResult.Success -> {
                 applicationScope.async {
                     localRunDataSource.upsertRun(remoteResult.data).asEmptyDataResult()
                 }.await()
@@ -96,8 +96,8 @@ class OfflineFirstRunRepository(
                     launch {
                         val run = it.run.toRun()
                         when (val result = remoteRunDataSource.postRun(run, it.mapPictureBytes)) {
-                            is Result.Error -> Unit
-                            is Result.Success -> {
+                            is RuniqueResult.Error -> Unit
+                            is RuniqueResult.Success -> {
                                 applicationScope.launch {
                                     runPendingSyncDao.deleteRunPendingSyncEntity(it.runId)
                                 }.join()
@@ -111,8 +111,8 @@ class OfflineFirstRunRepository(
                 .map {
                     launch {
                         when (remoteRunDataSource.deleteRun(it.runId)) {
-                            is Result.Error -> Unit
-                            is Result.Success -> {
+                            is RuniqueResult.Error -> Unit
+                            is RuniqueResult.Success -> {
                                 applicationScope.launch {
                                     runPendingSyncDao.deleteDeletedRunSyncEntity(it.runId)
                                 }.join()

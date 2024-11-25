@@ -8,7 +8,7 @@ import com.kaesik.core.domain.run.RemoteRunDataSource
 import com.kaesik.core.domain.run.Run
 import com.kaesik.core.domain.util.DataError
 import com.kaesik.core.domain.util.EmptyResult
-import com.kaesik.core.domain.util.Result
+import com.kaesik.core.domain.util.RuniqueResult
 import com.kaesik.core.domain.util.map
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.formData
@@ -22,7 +22,7 @@ import kotlinx.serialization.json.Json
 class KtorRemoteRunDataSource(
     private val httpClient: HttpClient
 ):RemoteRunDataSource {
-    override suspend fun getRuns(): Result<List<Run>, DataError.Network> {
+    override suspend fun getRuns(): RuniqueResult<List<Run>, DataError.Network> {
         return httpClient.get<List<RunDto>>(
             route = "/runs",
         ).map { runDtos ->
@@ -30,7 +30,7 @@ class KtorRemoteRunDataSource(
         }
     }
 
-    override suspend fun postRun(run: Run, mapPicture: ByteArray): Result<Run, DataError.Network> {
+    override suspend fun postRun(run: Run, mapPicture: ByteArray): RuniqueResult<Run, DataError.Network> {
         val createRunRequestJson = Json.encodeToString(run.toCreateRunRequest())
         val result = safeCall<RunDto> {
             httpClient.submitFormWithBinaryData(

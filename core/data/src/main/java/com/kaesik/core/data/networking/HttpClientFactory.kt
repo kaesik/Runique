@@ -3,7 +3,7 @@ package com.kaesik.core.data.networking
 import com.kaesik.core.data.BuildConfig
 import com.kaesik.core.domain.AuthInfo
 import com.kaesik.core.domain.SessionStorage
-import com.kaesik.core.domain.util.Result
+import com.kaesik.core.domain.util.RuniqueResult
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.auth.Auth
@@ -64,7 +64,7 @@ class HttpClientFactory(
                             )
                         )
 
-                        if (response is Result.Success) {
+                        if (response is RuniqueResult.Success) {
                             val newAuthInfo = AuthInfo(
                                 accessToken = response.data.accessToken,
                                 refreshToken = info?.refreshToken ?: "",

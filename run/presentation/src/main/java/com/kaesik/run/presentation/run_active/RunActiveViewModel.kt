@@ -6,11 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kaesik.core.domain.location.RuniqueLocation
 import com.kaesik.core.domain.run.Run
 import com.kaesik.core.domain.run.RunRepository
-import com.kaesik.core.domain.util.Result
+import com.kaesik.core.domain.util.RuniqueResult
 import com.kaesik.core.presentation.ui.asUiText
 import com.kaesik.run.domain.LocationDataCalculator
 import com.kaesik.run.domain.RunningTracker
@@ -160,10 +159,10 @@ class RunActiveViewModel(
 
             runningTracker.finishRun()
             when (val result = runRepository.upsertRun(run, mapPictureBytes)) {
-                is Result.Error -> {
+                is RuniqueResult.Error -> {
                     eventChannel.send(RunActiveEvent.Error(result.error.asUiText()))
                 }
-                is Result.Success -> {
+                is RuniqueResult.Success -> {
                     eventChannel.send(RunActiveEvent.RunSaved)
                 }
             }

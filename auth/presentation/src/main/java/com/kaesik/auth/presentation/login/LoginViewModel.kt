@@ -10,7 +10,7 @@ import com.kaesik.auth.domain.UserDataValidator
 import com.kaesik.auth.presentation.R
 import com.kaesik.auth.presentation.textAsFlow
 import com.kaesik.core.domain.util.DataError
-import com.kaesik.core.domain.util.Result
+import com.kaesik.core.domain.util.RuniqueResult
 import com.kaesik.core.presentation.ui.UiText
 import com.kaesik.core.presentation.ui.asUiText
 import kotlinx.coroutines.channels.Channel
@@ -49,7 +49,7 @@ class LoginViewModel(
             state = state.copy( isLoggingIn = false )
 
             when (result) {
-                is Result.Error -> {
+                is RuniqueResult.Error -> {
                     if (result.error == DataError.Network.UNAUTHORIZED) {
                         eventChannel.send(LoginEvent.Error(
                             UiText.StringResource(R.string.error_email_password_incorrect)
@@ -58,7 +58,7 @@ class LoginViewModel(
                         eventChannel.send(LoginEvent.Error(result.error.asUiText()))
                     )
                 }
-                is Result.Success -> {
+                is RuniqueResult.Success -> {
                     eventChannel.send(LoginEvent.LoginSuccess)
                 }
             }
