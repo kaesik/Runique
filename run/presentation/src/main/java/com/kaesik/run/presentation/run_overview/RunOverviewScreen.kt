@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +36,7 @@ import org.koin.androidx.compose.koinViewModel
 
 fun RunOverviewScreenRoot(
     onStartRunClick: () -> Unit,
+    onLogoutClick: () -> Unit,
     viewModel: RunOverviewViewModel = koinViewModel()
 ) {
     RunOverviewScreen(
@@ -45,6 +44,7 @@ fun RunOverviewScreenRoot(
         onAction = { action ->
             when (action) {
                 RunOverviewAction.OnStartClick -> onStartRunClick()
+                RunOverviewAction.OnLogoutClick -> onLogoutClick()
                 else -> Unit
             }
             viewModel.onAction(action)
