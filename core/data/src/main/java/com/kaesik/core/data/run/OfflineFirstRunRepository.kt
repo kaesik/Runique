@@ -8,6 +8,7 @@ import com.kaesik.core.domain.run.RemoteRunDataSource
 import com.kaesik.core.domain.run.Run
 import com.kaesik.core.domain.run.RunId
 import com.kaesik.core.domain.run.RunRepository
+import com.kaesik.core.domain.run.SyncRunScheduler
 import com.kaesik.core.domain.util.DataError
 import com.kaesik.core.domain.util.EmptyResult
 import com.kaesik.core.domain.util.RuniqueResult
@@ -25,6 +26,7 @@ class OfflineFirstRunRepository(
     private val applicationScope: CoroutineScope,
     private val runPendingSyncDao: RunPendingSyncDao,
     private val sessionStorage: SessionStorage,
+    private val syncRunScheduler: SyncRunScheduler,
 ): RunRepository {
     override fun getRuns(): Flow<List<Run>> {
         return localRunDataSource.getRuns()
@@ -55,6 +57,14 @@ class OfflineFirstRunRepository(
 
         return when (remoteResult) {
             is RuniqueResult.Error -> {
+                applicationScope.launch {
+                    syncRunScheduler.scheduleSync(
+                        type = SyncRunScheduler.SyncType.CreateRun(
+                            run = runWithId,
+                            mapPictureBytes = mapPicture
+                        )
+                    )
+                }.join()
                 RuniqueResult.Success(Unit)
             }
             is RuniqueResult.Success -> {
@@ -77,6 +87,14 @@ class OfflineFirstRunRepository(
         val remoteResult = applicationScope.async {
             remoteRunDataSource.deleteRun(id)
         }.await()
+
+        if (remoteResult is RuniqueResult.Error) {
+            applicationScope.launch {
+                syncRunScheduler.scheduleSync(
+                    type = SyncRunScheduler.SyncType.DeleteRun(id)
+                )
+            }.join()
+        }
     }
 
     override suspend fun syncPendingRuns() {
