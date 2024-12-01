@@ -19,14 +19,15 @@ import com.kaesik.run.presentation.run_active.service.RunActiveService
 @Composable
 fun NavigationRoot(
     navController: NavHostController,
-    isLoggedIn: Boolean
+    isLoggedIn: Boolean,
+    onAnalyticsClick: () -> Unit
 ) {
     NavHost(
         navController = navController,
         startDestination = if (isLoggedIn) "run" else "auth",
     ) {
         authGraph(navController)
-        runGraph(navController)
+        runGraph(navController, onAnalyticsClick)
     }
 }
 
@@ -78,7 +79,10 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
     }
 }
 
-private fun NavGraphBuilder.runGraph(navController: NavHostController) {
+private fun NavGraphBuilder.runGraph(
+    navController: NavHostController,
+    onAnalyticsClick: () -> Unit
+    ) {
     navigation(
         startDestination = "run_overview",
         route = "run"
@@ -88,6 +92,7 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
                 onStartRunClick = {
                     navController.navigate("run_active")
                 },
+                onAnalyticsClick = onAnalyticsClick,
                 onLogoutClick = {
                     navController.navigate("auth") {
                         popUpTo("run") {

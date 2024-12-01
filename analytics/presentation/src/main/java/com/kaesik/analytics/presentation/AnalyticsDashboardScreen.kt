@@ -24,12 +24,11 @@ import com.kaesik.core.presentation.designsystem.components.RuniqueToolbar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-
-fun AnalyticsDashboardViewModel(
+fun AnalyticsDashboardRoot(
     onBackClick: () -> Unit,
     viewModel: AnalyticsDashboardViewModel = koinViewModel()
 ) {
-    AnalyticsDashboardViewModelScreen(
+    AnalyticsDashboardScreen(
         state = viewModel.state,
         onAction = { action ->
             when (action) {
@@ -41,7 +40,7 @@ fun AnalyticsDashboardViewModel(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AnalyticsDashboardViewModelScreen(
+private fun AnalyticsDashboardScreen(
     state:  AnalyticsDashboardState?,
     onAction: (AnalyticsAction) -> Unit
 ) {
@@ -124,9 +123,9 @@ private fun AnalyticsDashboardViewModelScreen(
 
 @Preview
 @Composable
-private fun AnalyticsDashboardViewModelScreenPreview() {
+private fun AnalyticsDashboardScreenPreview() {
      RuniqueTheme {
-        AnalyticsDashboardViewModelScreen(
+        AnalyticsDashboardScreen(
             state = AnalyticsDashboardState(
                 totalDistanceRun = "100.0 km",
                 totalTimeRun = "0d 0h 0m",
