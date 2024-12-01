@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.runique.android.dynamic.feature)
+    alias(libs.plugins.compose.compiler)
 }
 android {
     namespace = "com.kaesik.analytics.analytics_feature"
@@ -7,6 +8,7 @@ android {
 
 dependencies {
     implementation(project(":app"))
+    implementation(libs.androidx.navigation.compose)
 
     api(projects.analytics.presentation)
     implementation(projects.analytics.domain)
